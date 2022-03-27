@@ -1,0 +1,159 @@
+﻿@model Asset
+@using OnlineTechnicalSupport.Models.Data;
+@{
+    ViewBag.Title = "Cihaz Bilgilerini Düzenle";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<h2>Cihaz Bilgilerini Düzenle</h2>
+<hr />
+<div>
+    @if (ViewBag.Result != null)
+    {
+        <div class="rounded-lg w-100">
+            <div class="alert alert-success">
+                @ViewBag.Result
+            </div>
+        </div>
+    }
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div>
+            <table class="w-100 table-bordered table-striped text-left">
+                <tr>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.ProductId, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.Product.Image, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.Product.Name, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.Product.ProductModel.Name, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.Product.ProductModel.ProductCategory.Name, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.ProductId)</small>
+                    </td>
+                    <td>
+                        <img src="~/Files/Images/Products/@Model.ProductId/@Model.Product.Image" style="width:64px;" />
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.Product.Name)</small>
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.Product.ProductModel.Name)</small>
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.Product.ProductModel.ProductCategory.Name)</small>
+                    </td>
+                </tr>
+            </table>
+            <table class="mt-3 w-100 table-bordered table-striped text-left">
+                <tr>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.AssetId, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.AssetTag, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.ServiceTag, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.PurchaseDate, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.AssetId)</small>
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.AssetTag)</small>
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.ServiceTag)</small>
+                    </td>
+                    <td>
+                        @if (Model.PurchaseDate != null)
+                        {
+                            <small>@Html.DisplayTextFor(model => model.PurchaseDate)</small>
+                        }
+                        else
+                        {
+                            @Html.EditorFor(model => model.PurchaseDate, new { htmlAttributes = new { @id = "datepicker", @style = "min-width:300px;", @class = "form-control-sm" } })
+                        }
+                    </td>
+                </tr>
+            </table>
+            @if (Model.PurchaseDate == null)
+            {
+                <div class="mt-3">
+                    <input type="submit" value="Kaydet" class="btn btn-sm btn-success" />
+                </div>
+            }
+            <br />
+        </div>
+    }
+    @if (Model.AssetWarrantyDetails.Count > 0)
+    {
+        <div>
+            <h5 class="float-left">Garanti Bilgileri</h5>
+            <div class="float-right">
+                @Html.ActionLink("+ Garanti Süresi Ekle", "NewWarranty", "Manager", new { id = Model.AssetId } , new { @class = "btn btn-sm btn-primary" })
+            </div>
+            <br /><br />
+            @foreach (var item in Model.AssetWarrantyDetails)
+            {
+                <table class="w-100 table-bordered table-striped text-left mb-3">
+                    <tr>
+                        <td>
+                            <small class="font-weight-bold">@Html.LabelFor(model => item.WarrantyType, htmlAttributes: new { @class = "control-label" })</small>
+                        </td>
+                        <td>
+                            <small class="font-weight-bold">@Html.LabelFor(model => item.WarrantyYears, htmlAttributes: new { @class = "control-label" })</small>
+                        </td>
+                        <td>
+                            <small class="font-weight-bold">@Html.LabelFor(model => item.WarrantyStartDate, htmlAttributes: new { @class = "control-label" })</small>
+                        </td>
+                        <td>
+                            <small class="font-weight-bold">@Html.LabelFor(model => item.WarrantyEndDate, htmlAttributes: new { @class = "control-label" })</small>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <small>@Html.DisplayTextFor(model => item.WarrantyType)</small>
+                        </td>
+                        <td>
+                            <small>@Html.DisplayTextFor(model => item.WarrantyYears) yıl</small>
+                        </td>
+                        <td>
+                            <small>@Html.DisplayTextFor(model => item.WarrantyStartDate)</small>
+                        </td>
+                        <td>
+                            <small>@Html.DisplayTextFor(model => item.WarrantyEndDate)</small>
+                        </td>
+                    </tr>
+                </table>
+            }
+        </div>
+    }
+</div>
+<br />
+
+
+<script>
+    $('#datepicker').datepicker({
+        uiLibrary: 'bootstrap4',
+        format: 'dd/mm/yyyy'
+    });
+</script>

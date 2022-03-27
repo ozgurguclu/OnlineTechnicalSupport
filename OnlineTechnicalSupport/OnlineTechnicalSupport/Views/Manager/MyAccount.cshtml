@@ -1,0 +1,144 @@
+﻿@model Manager
+@using OnlineTechnicalSupport.Models.Data;
+@{
+    ViewBag.Title = "Hesabım";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<h2>Hesabım</h2>
+<hr />
+<div>
+    @if (ViewBag.Error != null)
+    {
+        <div class="rounded-lg w-100">
+            <div class="alert alert-danger">
+                @ViewBag.Error
+            </div>
+        </div>
+    }
+    @if (ViewBag.Result != null)
+    {
+        <div class="rounded-lg w-100">
+            <div class="alert alert-success">
+                @ViewBag.Result
+            </div>
+        </div>
+    }
+    <div class="float-right">
+        @Html.LabelFor(model => model.LastLoginDate, htmlAttributes: new { @class = "control-label mb-0" })
+        @Html.DisplayTextFor(model => model.LastLoginDate)
+    </div>
+    @using (Html.BeginForm("MyAccount", "Manager", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div>
+            <table class="ml-3 mr-3" style="width:512px;">
+                <tr>
+                    <td class="w-50">
+                        @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label" })<br />
+                        @if (Model.Image != null)
+                        {
+                            <img src="~/Files/Images/Managers/@Model.ManagerId/@Model.Image" style="height:96px;" /><br />
+                        }
+                        else
+                        {
+                            <img src="~/Files/Images/unnamed.png" style="height:96px;" /><br />
+                        }
+                        <input type="file" name="file" class="btn btn-sm btn-primary" />
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </table>
+            <hr />
+            <table class="ml-3 mr-3" style="width:512px;">
+                <tr>
+                    <td class="w-50">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label mb-0" })
+                    </td>
+                    <td>
+                        @Html.DisplayTextFor(model => model.Name)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label mb-0" })
+                    </td>
+                    <td>
+                        @Html.DisplayTextFor(model => model.Surname)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label mb-0" })
+                    </td>
+                    <td>
+                        @Html.DisplayTextFor(model => model.Title)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label mb-0" })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @style = "", @class = "form-control-sm w-100" } })
+                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+            </table>
+            <hr />
+            <table class="ml-3 mr-3" style="width:512px;">
+                <tr>
+                    <td class="w-50">
+                        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label mb-0" })
+                    </td>
+                    <td>
+                        @Html.DisplayTextFor(model => model.Email)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.LoginName, htmlAttributes: new { @class = "control-label mb-0" })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.LoginName, new { htmlAttributes = new { @style = "", @class = "form-control-sm w-100" } })
+                        @Html.ValidationMessageFor(model => model.LoginName, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Yeni @Html.LabelFor(model => model.LoginPassword, htmlAttributes: new { @class = "control-label mb-0" })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.LoginPassword, new { htmlAttributes = new { @style = "", @class = "form-control-sm w-100" } })
+                        @Html.ValidationMessageFor(model => model.LoginPassword, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Yeni @Html.LabelFor(model => model.ReLoginPassword, htmlAttributes: new { @class = "control-label mb-0" })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.ReLoginPassword, new { htmlAttributes = new { @style = "", @class = "form-control-sm w-100" } })
+                        @Html.ValidationMessageFor(model => model.ReLoginPassword, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" value="Kaydet" class="btn btn-sm btn-success w-100" />
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <br />
+        </div>
+    }
+</div>
+

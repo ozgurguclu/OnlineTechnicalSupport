@@ -1,0 +1,38 @@
+﻿@model OnlineTechnicalSupport.Models.Data.Campaign
+@{
+    ViewBag.Title = "Kampanya Bilgileri";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div style="background-color:white;">
+        <div class="mt-5 pl-5 pr-5 pt-5 container m-auto" style="@(Model == null ? "display:none" : "display:block")">
+            <div>
+                <h5 class="font-weight-normal">@Model.Title</h5>
+            </div>
+            <div class="mt-3 pt-3">
+                <img src="~/Files/Images/Campaigns/@Model.CampaignId/@Model.Image" style="height:256px;" />
+                <br /><br />
+                <p class="font-weight-normal">@Model.Description</p>
+                <small class="font-weight-bold">
+                    Kampanya başlangıç tarihi:
+                </small>
+                <small class="font-weight-normal">
+                    @Model.StartDate.ToString()
+                </small>
+                <br />
+                <small class="font-weight-bold">
+                    Kampanya bitiş tarihi:
+                </small>
+                <small class="font-weight-normal">
+                    @Model.EndDate.ToString()
+                </small>
+                <br /><br />
+                @using (Html.BeginForm("Application", "Home", new { id = Model.CampaignId }, FormMethod.Get))
+                {
+                    <button type="submit" class="btn btn-sm btn-success">Başvur</button>
+                }
+            </div>
+        </div>
+    </div>
+<br />
+

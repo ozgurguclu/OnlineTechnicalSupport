@@ -1,0 +1,131 @@
+﻿@model OnlineTechnicalSupport.Models.ViewModels.OverViewModel
+@{
+    ViewBag.Title = "Anasayfa";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+    <h2>Genel bakış</h2>
+    <hr />
+    @if (ViewBag.MissedReports != null)
+    {
+        <div>
+            <div class="w-100 border border-dark alert alert-warning">
+                <small>
+                    Yanıt vermediğiniz @ViewBag.MissedReports rapor bildirimi vardır.
+                </small>
+            </div>
+        </div>
+    }
+    @if (ViewBag.MissedChats != null)
+    {
+    <div>
+        <div class="w-100 border border-dark alert alert-warning">
+            <small>
+                Yanıt vermediğiniz @ViewBag.MissedChats sohbet bağlantısı vardır.
+            </small>
+        </div>
+    </div>
+    }
+    <div>
+        <div class="row m-auto">
+            <div class="col-md-3 col-sm-6 col-xs-12 bg-info text-white rounded-lg">
+                <div class="row">
+                    <div class="col-8 pt-3 pb-3 my-auto">
+                        <p>
+                            Toplam rapor sayısı:
+                        </p>
+                    </div>
+                    <div class="col pt-3 pb-3">
+                        <h1>@Model.TotalReportCount</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 ml-auto bg-info text-white rounded-lg">
+                <div class="row">
+                    <div class="col-8 pt-3 pb-3 my-auto">
+                        <p>
+                            Toplam canlı destek sayısı:
+                        </p>
+                    </div>
+                    <div class="col pt-3 pb-3">
+                        <h1>@Model.TotalChatCount</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 ml-auto bg-success text-white rounded-lg">
+                <div class="row">
+                    <div class="col-8 pt-3 pb-3 my-auto">
+                        <p>
+                            Yanıtlanan rapor sayısı:
+                        </p>
+                    </div>
+                    <div class="col pt-3 pb-3">
+                        <h1>@Model.TotalRepliedReportCount</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 ml-auto ml-auto bg-success text-white rounded-lg">
+                <div class="row">
+                    <div class="col-8 pt-3 pb-3 my-auto">
+                        <p>
+                            Sonlandırılan canlı destek sayısı:
+                        </p>
+                    </div>
+                    <div class="col pt-3 pb-3">
+                        <h1>@Model.TotalRepliedChatCount</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row m-auto">
+            <div class="col-md-3 col-sm-6 col-xs-12 bg-primary text-white rounded-lg">
+                <div class="row">
+                    <div class="col-8 pt-3 pb-3 my-auto">
+                        <p>
+                            İlgilendiğiniz raporların sayısı:
+                        </p>
+                    </div>
+                    <div class="col pt-3 pb-3">
+                        <h1>@Model.ReceivedReportCount</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 ml-auto bg-primary text-white rounded-lg">
+                <div class="row">
+                    <div class="col-8 pt-3 pb-3 my-auto">
+                        <p>
+                            İlgilendiğiniz canlı destek sayısı:
+                        </p>
+                    </div>
+                    <div class="col pt-3 pb-3">
+                        <h1>@Model.ReceivedChatCount</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 ml-auto bg-success rounded-lg text-white">
+                <div class="row">
+                    <div class="col-8 pt-3 pb-3 my-auto">
+                        <p>
+                            Yanıtladığınız rapor sayısı:
+                        </p>
+                    </div>
+                    <div class="col pt-3 pb-3">
+                        <h1>@Model.RepliedReportCount</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 ml-auto ml-auto bg-success rounded-lg text-white">
+                <div class="row">
+                    <div class="col-8 pt-3 pb-3 my-auto">
+                        <p>
+                            Sonlandırdığınız canlı destek sayısı:
+                        </p>
+                    </div>
+                    <div class="col pt-3 pb-3">
+                        <h1>@Model.RepliedChatCount</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

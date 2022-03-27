@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Product>
+@using OnlineTechnicalSupport.Models.Data
+@{
+    ViewBag.Title = "Ürünler";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<h2>Ürünler</h2>
+<hr />
+<div>
+    <h5 class="font-weight-normal">Ürün kaydı arayın<br />(Kayıt no, ürün adı veya etiket kodu)</h5>
+    @using (Html.BeginForm("Products", "Manager", FormMethod.Get))
+    {
+        <div class="d-flex float-left">
+            @Html.TextBox("searchProduct", "", new { @style = "min-width:300px;", @class = "form-control-sm", autocomplete = "on", placeholder = "" })
+            <div class="ml-2"><button type="submit" class="btn btn-sm btn-primary">Ara</button></div>
+        </div>
+    }
+    <div class="float-right">
+        @Html.ActionLink("+ Yeni Ürün Ekle", "NewProduct", "Manager", new { @class = "btn btn-sm btn-primary" })
+    </div>
+    <br /><br />
+    <div>
+        <table class="w-100 table-bordered table-striped table-light">
+            <tr>
+                <td>
+                    <small class="font-weight-bold">Numara:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Ürün resmi:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Ürün adı:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Model adı:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Kategori adı:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Etiket kodu:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">İşlem:</small>
+                </td>
+            </tr>
+            @foreach (var item in Model)
+            {
+                using (Html.BeginForm("EditProduct", "Manager", new { id = item.ProductId }, FormMethod.Get))
+                {
+                    <tr>
+                        <td>
+                            <small>@item.ProductId</small>
+                        </td>
+                        <td>
+                            <img src="~/Files/Images/Products/@item.ProductId/@item.Image" style="width:64px;" />
+                        </td>
+                        <td>
+                            <small>@item.Name</small>
+                        </td>
+                        <td>
+                            <small>@item.ProductModel.Name</small>
+                        </td>
+                        <td>
+                            <small>@item.ProductModel.ProductCategory.Name</small>
+                        </td>
+                        <td>
+                            <small>@item.Tag</small>
+                        </td>
+                        <td>
+                            <button type="submit" name="btn" value="Edit" class="btn btn-sm btn-success">Düzenle</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+</div>
+

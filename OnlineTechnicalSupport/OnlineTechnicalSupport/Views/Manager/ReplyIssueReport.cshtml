@@ -1,0 +1,66 @@
+﻿@model ReplyRequestView
+@using OnlineTechnicalSupport.Models.ViewModels
+@{
+    ViewBag.Title = "Soruna yanıt verin";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <h2>Soruna yanıt verin</h2>
+    <br />
+    <div>
+        <div class="bg-light p-2 rounded-lg" style="max-width:700px;">
+            <div class="p-2 bg-white rounded-lg">
+                <div class="row mx-auto">
+                    <div class="col-sm-2 mx-auto my-auto">
+                        <img class="w-100" src="~/Files/Images/Products/@ViewBag.ProductId/@ViewBag.ProductImage" alt="" />
+                    </div>
+                    <div class="col-sm-10 w-100 my-auto justify-content-center lead">
+                        <label>Ürün: @ViewBag.ProductName</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label>Servis kimliği: @ViewBag.ServiceTag</label><br />
+                        <label>Sorun başlığı: @ViewBag.ServiceRequestTitle</label>
+                    </div>
+                </div>
+                <div class="row mx-auto">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10 w-100 my-auto justify-content-center lead">
+
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class=" overflow-auto">
+                <table class="w-100">
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.ReplyContent, htmlAttributes: new { @class = "control-label m-auto" })
+                        </td>
+                        <td>
+                            @Html.TextAreaFor(model => model.ReplyContent, 10, 70, new { htmlAttributes = new { @class = "form-control" } })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="submit" value="Gönder" class="btn btn-sm btn-success" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <hr />
+            <div>
+                @Html.ValidationMessageFor(model => model.ReplyContent, "", new { @class = "text-danger" })
+                @if (ViewBag.Result != null)
+                {
+                    <div class="alert alert-success">@ViewBag.Result</div>
+                }
+            </div>
+        </div>
+    </div>
+
+}

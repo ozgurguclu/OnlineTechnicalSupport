@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Campaign>
+@using OnlineTechnicalSupport.Models.Data
+@{
+    ViewBag.Title = "Campaigns";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<h2>Kampanyalar</h2>
+<hr />
+<div>
+    <h5 class="font-weight-normal">Kampanya kaydı arayın<br />(Kayıt no veya kampanya adı)</h5>
+    @using (Html.BeginForm("Campaigns", "Manager", FormMethod.Get))
+    {
+        <div class="d-flex float-left">
+            @Html.TextBox("searchCampaign", "", new { @style = "min-width:300px;", @class = "form-control-sm", autocomplete = "on", placeholder = "" })
+            <div class="ml-2"><button type="submit" class="btn btn-sm btn-primary">Ara</button></div>
+        </div>
+    }
+    <div class="float-right">
+        @Html.ActionLink("+ Yeni Kampanya Oluştur", "NewCampaign", "Manager", new { @class = "btn btn-sm btn-primary" })
+    </div>
+    <br /><br />
+    <div>
+        <table class="w-100 table-bordered table-striped table-light">
+            <tr>
+                <td>
+                    <small class="font-weight-bold">Numara:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Resim:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Kampanya adı:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Başlangıç:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Bitiş:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Durum:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Katılım sayısı:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">İşlem:</small>
+                </td>
+            </tr>
+            @foreach (var item in Model)
+            {
+
+                <tr>
+                    <td>
+                        <small>@item.CampaignId</small>
+                    </td>
+                    <td>
+                        <img src="~/Files/Images/Campaigns/@item.CampaignId/@item.Image" style="height:96px;" />
+                    </td>
+                    <td>
+                        <small>@item.Name</small>
+                    </td>
+                    <td>
+                        <small>@item.StartDate</small>
+                    </td>
+                    <td>
+                        <small>@item.EndDate</small>
+                    </td>
+                    <td>
+                        <small>
+                            @(item.Activated == 0 ? "Pasif" : "Aktif")
+                        </small>
+                    </td>
+                    <td>
+                        <small>@item.CampaignApplications.Count()</small>
+                    </td>
+                    <td style="width:172px;">
+                        @using (Html.BeginForm("EditCampaign", "Manager", new { id = item.CampaignId }, FormMethod.Get))
+                        {
+                            <button type="submit" name="btn" value="Edit" class="btn btn-sm btn-success float-left">Düzenle</button>
+                        }
+                        @using (Html.BeginForm("Applications", "Manager", new { id = item.CampaignId }, FormMethod.Get))
+                        {
+                            <button type="submit" name="btn" value="List" class="btn btn-sm btn-success float-left ml-2">Başvurular</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+

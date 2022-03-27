@@ -1,0 +1,111 @@
+﻿@model Campaign
+@using OnlineTechnicalSupport.Models.Data;
+@{
+    ViewBag.Title = "Yeni Kampanya Oluştur";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<h2>Yeni Kampanya Oluştur</h2>
+<hr />
+<div>
+    @if (ViewBag.Result != null)
+    {
+        <div class="rounded-lg w-100">
+            <div class="alert alert-success">
+                @ViewBag.Result
+            </div>
+        </div>
+    }
+    @using (Html.BeginForm("NewCampaign", "Manager", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div>
+            <table class="ml-3">
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })<br />
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @style = "", @class = "form-control-sm w-100" } })<br /><br />
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })<br />
+                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @style = "", @class = "form-control-sm w-100" } })<br /><br />
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })<br />
+                        @Html.TextAreaFor(model => model.Description, 5, 50, new { @style = "", @class = "p-2 w-100" })<br />
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label" })<br />
+                        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @id = "datepicker1", @style = "min-width:300px;", @class = "form-control-sm" } })<br />
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label" })<br />
+                        @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @id = "datepicker2", @style = "min-width:300px;", @class = "form-control-sm" } })<br />
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label" })<br />
+                        <input type="file" name="file" class="btn btn-sm btn-primary w-100" style="" />
+                        @if (ViewBag.cImage != null)
+                        {
+                            <p class="mt-2">Yüklenen resim</p>
+                            <img src="~/Files/Images/Campaigns/@ViewBag.cId/@ViewBag.cImage" style="height:128px;" />
+                        }
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" value="Gönder" class="btn btn-sm btn-success w-100" />
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <br />
+        </div>
+    }
+</div>
+
+<script>
+    $('#datepicker1').datepicker({
+        uiLibrary: 'bootstrap4',
+        format: 'dd/mm/yyyy'
+    });
+    $('#datepicker2').datepicker({
+        uiLibrary: 'bootstrap4',
+        format: 'dd/mm/yyyy'
+    });
+</script>
+

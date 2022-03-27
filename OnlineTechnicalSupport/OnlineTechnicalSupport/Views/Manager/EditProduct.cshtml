@@ -1,0 +1,79 @@
+﻿@model Product
+@using OnlineTechnicalSupport.Models.Data;
+@{
+    ViewBag.Title = "Ürünü Düzenle";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<h2>Ürünü Düzenle</h2>
+<hr />
+<div>
+        @if (ViewBag.Result != null)
+        {
+            <div class="rounded-lg w-100">
+                <div class="alert alert-success">
+                    @ViewBag.Result
+                </div>
+            </div>
+        }
+        @using (Html.BeginForm("EditProduct", "Manager", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div>
+                <table class="ml-3">
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.ProductModelId, htmlAttributes: new { @class = "control-label" })<br />
+                            @Html.DropDownListFor(model => model.ProductModelId, new SelectList(ViewBag.ProductModels, "Value", "Text"), "Ürün modeli", new { @style = "", @class = "form-control-sm w-100" })<br /><br />
+                        </td>
+                        <td>
+                            @Html.ValidationMessageFor(model => model.ProductModelId, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })<br />
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @style = "", @class = "form-control-sm w-100" } })<br /><br />
+                        </td>
+                        <td>
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Tag, htmlAttributes: new { @class = "control-label" })<br />
+                            @Html.EditorFor(model => model.Tag, new { htmlAttributes = new { @style = "", @class = "form-control-sm w-100" } })<br /><br />
+                        </td>
+                        <td>
+                            @Html.ValidationMessageFor(model => model.Tag, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label" })<br />
+                            <input type="file" name="file" class="btn btn-sm btn-primary" />
+                            <p class="mt-2">Yüklenen resim</p>
+                            <img src="~/Files/Images/Products/@Model.ProductId/@Model.Image" style="height:128px;" />
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" value="Gönder" class="btn btn-sm btn-success w-100" />
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <br />
+            </div>
+        }
+</div>
+

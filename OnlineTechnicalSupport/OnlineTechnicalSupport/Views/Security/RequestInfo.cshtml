@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = ViewBag.ttl;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5 mb-5 text-center">
+    <h5>@ViewBag.titl</h5>
+    @Html.ActionLink("Ana sayfaya dön", "Index", "Home", new { area = "" }, new { @class = "btn btn-primary" })
+</div>

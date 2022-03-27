@@ -1,0 +1,149 @@
+﻿@model ServiceRequest
+@using OnlineTechnicalSupport.Models.Data;
+@{
+    ViewBag.Title = "Servis Kaydını Düzenle";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<h2>Servis Kaydını Düzenle</h2>
+<hr />
+<div>
+    @if (ViewBag.Result != null)
+    {
+        <div class="rounded-lg w-100">
+            <div class="alert alert-success">
+                @ViewBag.Result
+            </div>
+        </div>
+    }
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div>
+            <table class="w-100 table-bordered table-striped text-left">
+                <tr>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.ServiceRequestId, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.IssueId, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.Asset.Product.Name, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.Asset.Product.ProductModel.Name, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.Asset.Product.ProductModel.ProductCategory.Name, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.ServiceRequestStatusId, htmlAttributes: new { @class = "control-label" })</small>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.ServiceRequestId)</small>
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.Issue.Name)</small>
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.Asset.Product.Name)</small>
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.Asset.Product.ProductModel.Name)</small>
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.Asset.Product.ProductModel.ProductCategory.Name)</small>
+                    </td>
+                    <td>
+                        @*<small>@Html.DisplayTextFor(model => model.ServiceRequestStatus.Tag)</small>*@
+                        @Html.DropDownListFor(model => model.ServiceRequestStatusId, new SelectList(ViewBag.ServiceStatus, "Value", "Text"), "Servis durumunu güncelle", new { @style = "", @class = "form-control-sm" })
+                    </td>
+                </tr>
+            </table>
+            <table class="mt-3 w-100 table-bordered table-striped text-left">
+                <tr>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.Surname, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.CreatedBy, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.DateOfCreate, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.Name)</small>
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.Surname)</small>
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.PhoneNumber)</small>
+                    </td>
+                    <td>
+                        <small class="text-break">@Html.DisplayTextFor(model => model.Title)</small>
+                    </td>
+                    <td>
+                        <small class="text-break">@Html.DisplayTextFor(model => model.Description)</small>
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.CreatedBy)</small>
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.DateOfCreate)</small>
+                    </td>
+                </tr>
+            </table>
+            <table class="mt-3 w-100 table-bordered table-striped text-left">
+                <tr>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.EditedBy, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                    <td>
+                        <small class="font-weight-bold">@Html.LabelFor(model => model.DateOfEdit, htmlAttributes: new { @class = "control-label" })</small>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @*<small>@Html.DisplayTextFor(model => model.Notes)</small>*@
+                        @Html.TextAreaFor(model => model.Notes, 5, 50, new { @style = "min-width:300px;", @class = "p-2 float-left" })
+                        @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger float-left" })
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.EditedBy)</small>
+                    </td>
+                    <td>
+                        <small>@Html.DisplayTextFor(model => model.DateOfEdit)</small>
+                    </td>
+                </tr>
+            </table>
+            <div class="mt-3">
+                <input type="submit" value="Kaydet" class="btn btn-sm btn-success" />
+            </div>
+            <br />
+        </div>
+    }
+</div>
+

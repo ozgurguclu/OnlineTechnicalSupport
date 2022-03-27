@@ -1,0 +1,103 @@
+﻿@model OnlineTechnicalSupport.Models.Data.IssueReport
+@{
+    ViewBag.Title = "İletilen Sorunu Görüntüle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div style="background-color:white;">
+        <div class="pl-5 pr-5 pt-5 container m-auto">
+            <div>
+                <h5 class="font-weight-normal">Daha önce bize bildirdiğiniz sorunu görüntüleyin</h5>
+                @using (Html.BeginForm("CheckIssueReport", "Home", FormMethod.Get, new { id = "frmServiceRequest" }))
+                {
+                    <div class="d-flex">
+                        @Html.TextBox("searchReport", "", new { @style = "min-width:300px;", @class = "form-control-sm", autocomplete = "on", placeholder = "Sorun bildiri takip kodu" })
+                        <div class="ml-2"><button type="submit" class="btn btn-sm btn-primary">Ara</button></div>
+                    </div>
+                }
+            </div>
+        </div>
+        @if (Model != null)
+        {
+            <div class="mt-3 pl-5 pr-5 pb-5 container" style="@(Model == null ? "display:none" : "display:block")">
+                <div class="pl-3 pr-3 rounded-lg" style="max-width:800px; background-color:lightgrey;">
+                    <h5 class="pt-3">Talep durumu</h5>
+                    <div class="pb-3">
+                        <table class="mt-3 w-100 table-bordered bg-white">
+                            <tr>
+                                <th>
+                                    <small class="font-weight-bold">@Html.LabelFor(model => model.Tag)</small>
+                                </th>
+                                <th>
+                                    <small class="font-weight-bold">@Html.LabelFor(model => model.Issue.Name)</small>
+                                </th>
+                                <th>
+                                    <small class="font-weight-bold">@Html.LabelFor(model => model.Asset.Product.Name)</small>
+                                </th>
+                                <th>
+                                    <small class="font-weight-bold">@Html.LabelFor(model => model.Asset.Product.ProductModel.ProductCategory.Name)</small>
+                                </th>
+                                <th>
+                                    <small class="font-weight-bold">@Html.LabelFor(model => model.DateOfCreate)</small>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <small>@Model.Tag</small>
+                                </td>
+                                <td>
+                                    <small>@Model.Issue.Name</small>
+                                </td>
+                                <td>
+                                    <small>@Model.Asset.Product.Name</small>
+                                </td>
+                                <td>
+                                    <small>@Model.Asset.Product.ProductModel.ProductCategory.Name</small>
+                                </td>
+                                <td>
+                                    <small>@Model.DateOfCreate</small>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="mt-3 w-100 table-bordered bg-white">
+                            <tr>
+                                <th>
+                                    <small class="font-weight-bold">@Html.LabelFor(model => model.Title)</small>
+                                </th>
+                                <th>
+                                    <small class="font-weight-bold">@Html.LabelFor(model => model.Description)</small>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <small class="text-break">@Model.Title</small>
+                                </td>
+                                <td class="w-75">
+                                    <small class="text-break">@Model.Description</small>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="mt-3 w-100 table-bordered bg-white">
+                            <!--style="@(@Model.Reply == null ? "display:none" : "display:block")"-->
+                            <tr>
+                                <th>
+                                    <small class="font-weight-bold">@Html.LabelFor(model => model.Reply)</small>
+                                </th>
+                                <th>
+                                    <small class="font-weight-bold">@Html.LabelFor(model => model.DateOfReply)</small>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td class="w-75">
+                                    <small class="text-break">@Model.Reply</small>
+                                </td>
+                                <td>
+                                    <small>@Model.DateOfReply</small>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>

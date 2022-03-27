@@ -1,0 +1,237 @@
+﻿@model HomeOverViewModel
+@using OnlineTechnicalSupport.Models.ViewModels
+@{
+    ViewBag.Title = "BT Destek";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Raw(TempData["msg"])
+
+<div style="background:url(../../Files/Images/person.jpg) center/cover no-repeat; min-height:250px;">
+    <a style="font-size:14px;" href="https://www.freepik.com/photos/background">Background photo created by ijeab - www.freepik.com</a>
+    <div class="container">
+        <h5 class="font-weight-normal text-light text-center mt-5">Hoşgeldiniz</h5>
+        <h3 class="font-weight-normal text-light text-center mt-3">Cihazlarınızı görüntüleyin ve destek alın</h3>
+    </div>
+</div>
+<div style="background-color:white">
+    <div class="row container m-auto pt-5 pb-5">
+        <div class="col-md-8 p-2">
+            <div class="p-3 bg-light rounded-lg">
+                <div class="row text-center">
+                    <div class="col-md-3"><a id="TechnicalSupport" href="~/Home/FindYourProduct"><img style="max-width:50px;" src="~/Files/Images/gears.png" /><p class="text-primary font-weight-normal pt-2" href="#">Teknik Destek</p></a></div>
+                    <div class="col-md-3"><a id="ServiceRequest" href="~/Home/FindYourProduct"><img style="max-width:50px;" src="~/Files/Images/view-file.png" /><p class="text-primary font-weight-normal pt-2" href="#">Servis Talebi</p></a></div>
+                    <div class="col-md-3"><a id="Pre-sale" href="~/Home/Campaigns"><img style="max-width:50px;" src="~/Files/Images/shopping-bag--v1.png" /><p class="text-primary font-weight-normal pt-2" href="#">Kampanyalar</p></a></div>
+                    <div class="col-md-3"><a id="Downloads" href="#"><img style="max-width:50px;" src="~/Files/Images/downloading-updates.png" /><p class="text-primary font-weight-normal pt-2" href="#">Yazılım/Sürücü Merkezi</p></a></div>
+                </div>
+            </div>
+            <div class="p-3 mt-3 bg-light rounded-lg">
+                <h5 class="text-primary font-weight-normal pt-2">Teknik desteğe başvurun</h5>
+                <p class="font-weight-normal">Ürünlerinizle ilgili yaşadığınız sorunları bizimle paylaşabilir ve çevrim içi destek alabilirsiniz.</p>
+                <p>@Html.ActionLink("Servis talebi oluştur", "FindYourProduct", "Home", new { area = "" }, new { @class = "btn btn-primary" })</p>
+            </div>
+            <div class="p-3 mt-3 bg-light rounded-lg">
+                <h5 class="text-primary font-weight-normal pt-2">Talebinizin durumunu öğrenin.</h5>
+                <p class="font-weight-normal">Daha önce başvurduğunuz servis taleplerini takip edin.</p>
+                <p>@Html.ActionLink("Kontrol Et", "CheckIssueReport", "Home", new { area = "" }, new { @class = "btn btn-primary" })</p>
+            </div>
+        </div>
+        <div class="col-md-4 p-2">
+            <div class="p-3 bg-light rounded-lg">
+                <h6 class="text-primary font-weight-normal pt-2">Cihazlarınız</h6>
+                @using (Html.BeginForm("GetAny", "Home", FormMethod.Get))
+                {
+                    <div class="d-flex">
+                        @Html.TextBox("search", "", new { @style = "font-size:14px;", @class = "form-control-sm w-100", autocomplete = "on", placeholder = "Cihaz seri numarası veya servis numarası" })
+                        <div class="ml-2"><button type="submit" name="btn" value="asset" class="btn btn-sm btn-primary">Ekle</button></div>
+                    </div>
+                }
+                @foreach (var item in Model.Assets)
+                {
+                    <table class="w-100 table-bordered table-active mt-3" style="font-size:14px;">
+                        <tr>
+                            <td>
+                                <small class="font-weight-bold"></small>
+                            </td>
+                            <td>
+                                <small class="font-weight-bold">Cihaz</small>
+                            </td>
+                            <td>
+                                <small class="font-weight-bold">Kimlik</small>
+                            </td>
+                            <td>
+                                <small class="font-weight-bold">İşlem</small>
+                            </td>
+                        </tr>
+                        @using (Html.BeginForm("SetAny", "Home", new { id = item.AssetId, page = "Index", type = "asset" }, FormMethod.Post))
+                        {
+                            <tr>
+                                <td style="max-width:60px;">
+                                    <small><img class="w-100" src="../../Files/Images/Products/@item.ProductId/@item.Product.Image" alt="" /></small>
+                                </td>
+                                <td>
+                                    <small>@item.Product.Name</small>
+                                </td>
+                                <td>
+                                    <small>@item.AssetTag</small>
+                                </td>
+                                <td>
+                                    <button type="submit" name="btn" value="Show" class="btn btn-sm btn-success" style="font-size:12px;">Görüntüle</button>
+                                    <button type="submit" name="btn" value="Remove" class="btn btn-sm btn-warning" style="font-size:12px;">Kaldır</button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+                <hr />
+                <h6 class="text-primary font-weight-normal">Cihaz Onarımları</h6>
+                @using (Html.BeginForm("GetAny", "Home", FormMethod.Get))
+                {
+                    <div class="d-flex">
+                        @Html.TextBox("search", "", new { @style = "font-size:14px;", @class = "form-control-sm w-100", autocomplete = "on", placeholder = "Onarım hizmeti takip kodu" })
+                        <div class="ml-2"><button type="submit" name="btn" value="serviceRequest" class="btn btn-sm btn-primary">Ekle</button></div>
+                    </div>
+                }
+                @foreach (var item in Model.ServiceRequests)
+                {
+                    <table class="w-100 table-bordered table-active mt-3" style="font-size:14px;">
+                        <tr>
+                            <td>
+                                <small class="font-weight-bold">Takip kodu</small>
+                            </td>
+                            <td>
+                                <small class="font-weight-bold">Kayıt tarihi</small>
+                            </td>
+                            <td>
+                                <small class="font-weight-bold">İşlem</small>
+                            </td>
+                        </tr>
+                        @using (Html.BeginForm("SetAny", "Home", new { id = item.ServiceRequestId, page = "Index", type = "serviceRequest" }, FormMethod.Post))
+                        {
+                            <tr>
+                                <td>
+                                    <small>@item.Tag</small>
+                                </td>
+                                <td>
+                                    <small>@item.DateOfCreate</small>
+                                </td>
+                                <td>
+                                    <button type="submit" name="btn" value="Show" class="btn btn-sm btn-success" style="font-size:12px;">Görüntüle</button>
+                                    <button type="submit" name="btn" value="Remove" class="btn btn-sm btn-warning" style="font-size:12px;">Kaldır</button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+                <hr />
+                <h6 class="text-primary font-weight-normal">Sorun bildirileriniz</h6>
+                @using (Html.BeginForm("GetAny", "Home", FormMethod.Get))
+                {
+                    <div class="d-flex">
+                        @Html.TextBox("search", "", new { @style = "font-size:14px;", @class = "form-control-sm w-100", autocomplete = "on", placeholder = "Sorun bildiri takip kodu" })
+                        <div class="ml-2"><button type="submit" name="btn" value="issueReport" class="btn btn-sm btn-primary">Ekle</button></div>
+                    </div>
+                }
+                @foreach (var item in Model.IssueReports)
+                {
+                    <table class="w-100 table-bordered table-active mt-3" style="font-size:14px;">
+                        <tr>
+                            <td>
+                                <small class="font-weight-bold">Takip kodu</small>
+                            </td>
+                            <td>
+                                <small class="font-weight-bold">Kayıt tarihi</small>
+                            </td>
+                            <td>
+                                <small class="font-weight-bold">İşlem</small>
+                            </td>
+                        </tr>
+                        @using (Html.BeginForm("SetAny", "Home", new { id = item.IssueReportId, page = "Index", type = "issueReport" }, FormMethod.Post))
+                        {
+                            <tr>
+                                <td>
+                                    <small>@item.Tag</small>
+                                </td>
+                                <td>
+                                    <small>@item.DateOfCreate</small>
+                                </td>
+                                <td>
+                                    <button type="submit" name="btn" value="Show" class="btn btn-sm btn-success" style="font-size:12px;">Görüntüle</button>
+                                    <button type="submit" name="btn" value="Remove" class="btn btn-sm btn-warning" style="font-size:12px;">Kaldır</button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+                <hr />
+                <h6 class="text-primary font-weight-normal">Son sohbetleriniz</h6>
+                @using (Html.BeginForm("GetAny", "Home", FormMethod.Get))
+                {
+                    <div class="d-flex">
+                        @Html.TextBox("search", "", new { @style = "font-size:14px;", @class = "form-control-sm w-100", autocomplete = "on", placeholder = "Sohbet bağlantı kodu" })
+                        <div class="ml-2"><button type="submit" name="btn" value="chat" class="btn btn-sm btn-primary">Ekle</button></div>
+                    </div>
+                }
+                @foreach (var item in Model.Chats)
+                {
+                    <table class="w-100 table-bordered table-active mt-3" style="font-size:14px;">
+                        <tr>
+                            <td>
+                                <small class="font-weight-bold">Takip kodu</small>
+                            </td>
+                            <td>
+                                <small class="font-weight-bold">Kayıt tarihi</small>
+                            </td>
+                            <td>
+                                <small class="font-weight-bold">İşlem</small>
+                            </td>
+                        </tr>
+                        @using (Html.BeginForm("SetAny", "Home", new { id = item.ChatId, type = "chat" }, FormMethod.Post))
+                        {
+                            <tr>
+                                <td>
+                                    <small>@item.Tag</small>
+                                </td>
+                                <td>
+                                    <small>@item.DateOfCreate</small>
+                                </td>
+                                <td>
+                                    <button type="submit" name="btn" value="Show" class="btn btn-sm btn-success" style="font-size:12px;">Bağlan</button>
+                                    <button type="submit" name="btn" value="Remove" class="btn btn-sm btn-warning" style="font-size:12px;">Kaldır</button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="jumbotron bg-primary rounded-0 text-white">
+    <div class="row container m-auto">
+        <div class="col-sm-3 border border-white rounded-lg">
+            <h4 class="p-3">Eposta</h4>
+            <p class="lead pl-3 pr-3 pb-3">Bir servis talebi gönderin ve bir temsilcimiz kısa süre içinde size e-posta gönderecektir.</p>
+        </div>
+        <div class="col-sm-3 border border-white rounded-lg ml-auto">
+            <h4 class="p-3">Mesajlaşma</h4>
+            <p class="lead pl-3 pr-3 pb-3">Temsilcilerimizden biriyle sohbet edin.</p>
+        </div>
+        <div class="col-sm-3 border border-white rounded-lg ml-auto">
+            <h4 class="p-3">Arama</h4>
+            <p class="lead pl-3 pr-3 pb-3">Sorununuzu belirledikten sonra görüntülenen telefonu arayarak canlı desteğe bağlanın.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#hide").click(function () {
+            $("p").hide();
+        });
+        $("#show").click(function () {
+            $("p").show();
+        });
+    });
+</script>

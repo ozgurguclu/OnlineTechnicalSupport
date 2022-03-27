@@ -1,0 +1,90 @@
+﻿@model OnlineTechnicalSupport.Models.Data.IssueReport
+@using OnlineTechnicalSupport.Models.Data;
+@{
+    ViewBag.Title = "Sorun bildir";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@functions{
+    public Asset asset()
+    {
+        var asset = Session["Asset"] as Asset;
+        return asset;
+    }
+}
+
+
+
+    <div style="background-color:white;">
+        <div class="pl-5 pr-5 pt-5 container m-auto">
+            @if (ViewBag.Result != null)
+            {
+                <div class="rounded-lg w-100">
+                    <div class="alert alert-success">
+                        @ViewBag.Result
+                    </div>
+                </div>
+            }
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="rounded-lg mx-auto">
+                    <div class="p-2 bg-white rounded-lg">
+                        <div class="row mx-auto">
+                            <div class="col-sm-2 mx-auto my-auto">
+                                <img class="w-100" src="~/Files/Images/Products/@asset().ProductId/@asset().Product.Image" alt="" />
+                            </div>
+                            <div class="col-sm-10 w-100 my-auto justify-content-center lead">
+                                <small class="font-weight-bold">Ürün: </small><small>@asset().Product.Name</small>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <small class="font-weight-bold">Servis kimliği: </small><small>@asset().ServiceTag</small>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <table class="ml-3">
+                        <tr>
+                            <td>
+                                @Html.LabelFor(model => model.IssueId, htmlAttributes: new { @class = "control-label" })<br />
+                                @Html.DropDownListFor(model => model.IssueId, new SelectList(ViewBag.Issues, "Value", "Text"), "Sorununuzu belirleyiniz", new { @style = "min-width:300px;" , @class = "form-control-sm" })<br /><br />
+                            </td>
+                            <td>
+                                @Html.ValidationMessageFor(model => model.IssueId, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })<br />
+                                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @style = "min-width:300px;" , @class = "form-control-sm" } })<br /><br />
+                            </td>
+                            <td>
+                                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })<br />
+                                @Html.TextAreaFor(model => model.Description, 5, 50, new { @style = "min-width:300px;" , @class = "p-2"} )<br />
+                            </td>
+                            <td>
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="submit" value="Gönder" class="btn btn-success w-100" />
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>
+            }
+        </div>
+    </div>

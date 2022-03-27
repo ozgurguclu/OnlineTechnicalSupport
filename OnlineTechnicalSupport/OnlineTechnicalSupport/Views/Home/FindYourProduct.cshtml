@@ -1,0 +1,180 @@
+﻿@model ServiceSupportOverViewModel
+@using OnlineTechnicalSupport.Models.ViewModels
+@{
+    ViewBag.Title = "Servis Durumunu Sorgulayın";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="background-color:white;">
+    <div class="p-5 container m-auto">
+        <div>
+            <h5 class="font-weight-normal">Ürününüzü arayın</h5>
+            <p>
+                Örnek servis kimliği: FBF56DHT6A
+                <br />
+                Örnek servis kimliği: HWD2GS92BT
+            </p>
+            @using (Html.BeginForm("FindYourProduct", "Home", FormMethod.Get, new { id = "frmProduct" }))
+            {
+                <div class="d-flex">
+                    @Html.TextBox("searchAsset", "", new { @style = "min-width:300px;", @class = "form-control-sm", autocomplete = "on", placeholder = "Cihaz seri numarası veya servis numarası" })
+                    <div class="ml-2"><button type="submit" class="btn btn-sm btn-primary">Ara</button></div>
+                </div>
+            }
+            <div class="mt-3 rounded-lg overflow-auto" style="@(Model.Assets.Count() == 0 ? "display:none" : "display:block; background-color:lightgrey;")">
+                <h5 class="font-weight-normal pt-3 pl-3">Cihazlarınız</h5>
+                <div class="p-3">
+                    @foreach (var asset in Model.Assets)
+                    {
+                        using (Html.BeginForm("SetAny", "Home", new { id = asset.AssetId, page = "FindYourProduct", type = "asset" }, FormMethod.Post))
+                        {
+                            <div class="float-left p-2 mr-3 mb-3 text-center bg-white rounded-lg" style="max-width:256px; min-height:200px;">
+                                <div style="min-width:128px; min-height:100px;">
+                                    <img class="w-100" style="max-width:128px;" src="~/Files/Images/Products/@asset.ProductId/@asset.Product.Image" />
+                                </div>
+                                <p class="mt-2">@asset.Product.ProductModel.Name @asset.Product.Name</p>
+                                <button type="submit" name="btn" value="Show" class="btn btn-sm btn-success" style="font-size:12px;">Görüntüle</button>
+                                <button type="submit" name="btn" value="Remove" class="btn btn-sm btn-warning" style="font-size:12px;">Kaldır</button>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (Model.SelectedAsset != null)
+    {
+        foreach (var asset in Model.SelectedAsset)
+        {
+            <div class="pl-5 pr-5 pb-5 container m-auto" style="@(@asset == null ? "display:none" : "display:block")">
+                <div>
+                    <div class="row bg-white rounded-lg">
+                        <div class="col-sm-4 pt-5 pb-3 mt-3">
+                            <img class="w-100" src="../../Files/Images/Products/@asset.ProductId/@asset.Product.Image" alt="" />
+                        </div>
+                        <div class="col-sm-8 pt-3 pb-3 mt-3 ml-auto">
+                            <h5 class="text-primary">@asset.Product.ProductModel.Name @asset.Product.Name</h5>
+                            <br />
+                            <table class="table-bordered w-100 bg-white text-break">
+                                <tr>
+                                    <td>
+                                        <small class="font-weight-bold">Ürün adı:</small>
+                                    </td>
+                                    <td>
+                                        <small>@asset.Product.Name</small>
+                                    </td>
+                                    <td>
+                                        <small class="font-weight-bold">Satın alma tarihi:</small>
+                                    </td>
+                                    <td>
+                                        <small>@if (asset.PurchaseDate == null) { Write("--/--/----"); } else { Write(asset.PurchaseDate); }</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <small class="font-weight-bold">Ürün Etiketi:</small>
+                                    </td>
+                                    <td>
+                                        <small>@asset.Product.Tag</small>
+                                    </td>
+                                    <td>
+                                        <small class="font-weight-bold">Garanti bitiş tarihi:</small>
+                                    </td>
+                                    <td>
+                                        <small>@if (asset.AssetWarrantyDetails.LastOrDefault() == null) { Write("--/--/----"); } else { Write(asset.AssetWarrantyDetails.LastOrDefault().WarrantyEndDate); }</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <small class="font-weight-bold">Ürün kimliği:</small>
+                                    </td>
+                                    <td>
+                                        <small>@asset.AssetTag</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <small class="font-weight-bold">Servis kodu:</small>
+                                    </td>
+                                    <td>
+                                        <small>@asset.ServiceTag</small>
+                                    </td>
+                                </tr>
+                            </table><br />
+                                    <div style="@(@asset.ServiceRequests.Count() == 0 ? "display:none" : "display:block")">
+                                        <h5 class="text-primary">Servis hareketleri</h5>
+                                        <br />
+                                        <table class="table-bordered w-100 bg-white text-break">
+                                            <tr>
+                                                <td>
+                                                    <small class="font-weight-bold">Takip kodu</small>
+                                                </td>
+                                                <td>
+                                                    <small class="font-weight-bold">Servis kayıt tarihi</small>
+                                                </td>
+                                                <td>
+                                                    <small class="font-weight-bold">Sorun türü</small>
+                                                </td>
+                                                <td>
+                                                    <small class="font-weight-bold">Düzenleme tarihi</small>
+                                                </td>
+                                                <td>
+                                                    <small class="font-weight-bold">Durum</small>
+                                                </td>
+                                            </tr>
+                                            @foreach (var serviceRequest in asset.ServiceRequests)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <small>@serviceRequest.Tag</small>
+                                                    </td>
+                                                    <td>
+                                                        <small>@serviceRequest.DateOfCreate</small>
+                                                    </td>
+                                                    <td>
+                                                        <small>@serviceRequest.Issue.Name</small>
+                                                    </td>
+                                                    <td>
+                                                        <small>
+                                                            @if (serviceRequest.DateOfEdit != null)
+                                                            {
+                                                                @serviceRequest.DateOfEdit
+                                                            }
+                                                            else
+                                                            {
+                                                                Write("--/--/----");
+                                                            }
+                                                        </small>
+                                                    </td>
+                                                    <td>
+                                                        <small>@serviceRequest.ServiceRequestStatus.Tag</small>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </table><br />
+                                    </div>
+                            <table class="w-100 text-break">
+                                <tr>
+                                    <td>
+                                        @using (Html.BeginForm("NewIssueReport", "Home", FormMethod.Get))
+                                        {
+                                            <button type="submit" class="btn btn-success w-100">Sorun bildir</button>
+                                        }
+                                    </td>
+                                    <td>
+                                        @using (Html.BeginForm("LiveSupportRequest", "Home", FormMethod.Get))
+                                        {
+                                            <button type="submit" class="btn btn-success w-100">Canlı destek</button>
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+</div>

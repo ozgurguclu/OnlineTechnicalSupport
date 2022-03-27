@@ -1,0 +1,169 @@
+﻿@model OnlineTechnicalSupport.Models.Data.TextMessage
+@using OnlineTechnicalSupport.Models.Data;
+@{
+    Layout = null;
+    ViewBag.Title = "Canlı destek";
+}
+
+@functions{
+    public Chat Chat()
+    {
+        var chat = Session["Chat"] as Chat;
+        return chat;
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style type="text/css">
+        body {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            /*background: url(../../Files/Images/bgHome.png) center/cover no-repeat;*/
+        }
+    </style>
+</head>
+<body>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/signalr")
+
+    @Html.Hidden("GetMessages", Url.Action("GetMessages", "Home"))
+    @Html.Raw(TempData["msg"])
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="pl-5 pr-5 pt-5 container m-auto">
+            <div class="rounded-lg mx-auto">
+                <div class="p-2 bg-white rounded-lg">
+                    <div class="row mx-auto">
+                        <div class="col-sm-2 mx-auto my-auto">
+                            <a href="~/Home/Index" class="btn btn-sm btn-primary p-2"><i class="fa fa-home"></i> Ana sayfa</a>
+                        </div>
+                        <div class="col-sm-2 mx-auto my-auto">
+                            <img class="w-100" src="~/Files/Images/Products/@Chat().Asset.ProductId/@Chat().Asset.Product.Image" alt="" />
+                        </div>
+                        <div class="col-sm-8 w-100 my-auto justify-content-center lead">
+                            <small class="font-weight-bold">Sorun başlığı:&nbsp;</small><small>@Chat().Title</small><br />
+                            <small class="font-weight-bold">Ürün:&nbsp;</small><small>@Chat().Asset.Product.Name</small><br />
+                            <small class="font-weight-bold">Servis kimliği:&nbsp;</small><small>@Chat().Asset.ServiceTag</small>
+                        </div>
+                    </div>
+                    <div class="row mx-auto">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-10 w-100 my-auto justify-content-center lead">
+
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div id="chatArea" class="container overflow-auto border border-secondary pb-3" style="min-height:300px; max-height:300px; background-color:lightgray;">
+
+                    <!-- Text Messages -->
+
+                </div>
+                <br />
+                <table class="w-100">
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.TextContent, htmlAttributes: new { @class = "control-label" })
+                        </td>
+                        <td class="w-75">
+                            @Html.EditorFor(model => model.TextContent, new { htmlAttributes = new { @class = "form-control-sm w-100" } })
+                        </td>
+                        <td>
+                            <input type="submit" value="Gönder" class="btn btn-sm btn-success w-100" />
+                        </td>
+                    </tr>
+                </table>
+                <hr />
+                <div>
+                    @Html.ValidationMessageFor(model => model.TextContent, "", new { @class = "text-danger" })
+                    @if (ViewBag.Result != null)
+                    {
+                        <div class="alert alert-success">@ViewBag.Result</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    }
+
+    <script src="~/signalr/hubs" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            var msg = $.connection.chatHub;
+            msg.client.displayMessages = function () {
+                getData();
+            };
+            $.connection.hub.start();
+            getData();
+        });
+        function getData() {
+            var $tbl = $('#chatArea');
+            $.ajax({
+                url: $('#GetMessages').val(),
+                type: 'GET',
+                data: { code: location.search.split('code=')[1] },
+                datatype: 'json',
+                success: function (data) {
+                    $tbl.empty();
+                    $tbl.append(
+                        '<div class="bg-primary text-white text-break text-center p-2 mt-3 w-75 mx-auto" style="border-radius: 15px 15px 15px 15px;"><small>' + 'Görüşme kayıt altına alınacaktır. Lütfen saygı kuralları çerçevesinde iletilerinizi gönderiniz.' + '</small></div>'
+                    );
+                    $tbl.append(
+                        '<div class="bg-primary text-white text-break text-center p-2 mt-3 w-75 mx-auto" style="border-radius: 15px 15px 15px 15px;"><small>' + 'Temsilcimiz henüz bağlanmadı. Lütfen bekleyiniz.' + '</small></div>'
+                    );
+                    $.each(data.msgList, function (i, model) {
+                        var $isManager = model.ManagerId;
+                        if (model == null) {
+                            $tbl.append(
+                                '<div class="bg-primary text-white p-2 mt-3 w-75 mx-auto" style="border-radius: 15px 15px 15px 15px;">' + 'Boş mesaj' + '</div>'
+                            );
+                        }
+                        else if ($isManager != "") {
+                            $tbl.append(
+
+                                '<div class="bg-light p-2 pl-5 mt-3 w-50" style="border-radius: 0px 15px 15px 50px;">' +
+
+                                '<small class="text-primary font-weight-bold">' + model.SenderName + ' - ' + model.Date + '</small>' + '<br/>' +
+                                '<small class="text-break">' + model.TextContent + '</small>' +
+
+                                '</div>'
+
+                            );
+                        }
+                        else {
+                            $tbl.append(
+
+                                '<div class="ml-auto bg-light p-2 mt-3 w-50" style="border-radius: 15px 0px 50px 15px;">' +
+
+                                '<small class="text-primary font-weight-bold">' + model.SenderName + ' - ' + model.Date + '</small>' + '<br/>' +
+                                '<small class="text-break">' + model.TextContent + '</small>' +
+
+                                '</div>'
+
+                            );
+                        }
+                    });
+                    $tbl.scrollTop($tbl[0].scrollHeight);
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

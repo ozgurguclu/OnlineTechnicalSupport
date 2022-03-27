@@ -1,0 +1,80 @@
+﻿@model IEnumerable<ServiceRequest>
+@using OnlineTechnicalSupport.Models.Data
+@{
+    ViewBag.Title = "Onarım Servisleri";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<h2>Onarım Servisleri</h2>
+<hr />
+<div>
+    <h5 class="font-weight-normal">Servis kaydı arayın<br />(Kayıt no, takip kodu, cihaz seri numarası veya cihaz servis kodu)</h5>
+    @using (Html.BeginForm("ServiceRequests", "Manager", FormMethod.Get))
+    {
+        <div class="d-flex float-left">
+            @Html.TextBox("searchService", "", new { @style = "min-width:300px;", @class = "form-control-sm", autocomplete = "on", placeholder = "" })
+            <div class="ml-2"><button type="submit" class="btn btn-sm btn-primary">Ara</button></div>
+        </div>
+    }
+    <div class="float-right">
+        @Html.ActionLink("+ Yeni Servis Aç", "NewServiceRequest", "Manager", new { @class = "btn btn-sm btn-primary" })
+    </div>
+    <br /><br />
+    <div>
+        <table class="w-100 table-bordered table-striped table-light">
+            <tr>
+                <td>
+                    <small class="font-weight-bold">Numara:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Ürün resmi:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Ürün adı:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Oluşturma tarihi:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Güncelleme tarihi:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Durum:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">İşlem:</small>
+                </td>
+            </tr>
+            @foreach (var item in Model)
+            {
+                using (Html.BeginForm("EditServiceRequest", "Manager", new { id = item.ServiceRequestId }, FormMethod.Get))
+                {
+                    <tr>
+                        <td>
+                            <small>@item.ServiceRequestId</small>
+                        </td>
+                        <td>
+                            <img src="~/Files/Images/Products/@item.Asset.ProductId/@item.Asset.Product.Image" style="width:64px;"/>
+                        </td>
+                        <td>
+                            <small>@item.Asset.Product.ProductModel.Name @item.Asset.Product.Name @item.Asset.Product.ProductModel.ProductCategory.Name</small>
+                        </td>
+                        <td>
+                            <small>@item.DateOfCreate</small>
+                        </td>
+                        <td>
+                            <small>@item.DateOfEdit</small>
+                        </td>
+                        <td>
+                            <small>@item.ServiceRequestStatus.Tag</small>
+                        </td>
+                        <td>
+                            <button type="submit" name="btn" value="Edit" class="btn btn-sm btn-success">Düzenle</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+</div>
+

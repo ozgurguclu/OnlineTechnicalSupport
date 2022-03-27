@@ -1,0 +1,50 @@
+﻿@model IEnumerable<CampaignApplication>
+@using OnlineTechnicalSupport.Models.Data
+@{
+    ViewBag.Title = "Kampanya Başvuruları";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<h2>Kampanya Başvuruları</h2>
+<hr />
+<div>
+    <div>
+        <table class="w-100 table-bordered table-striped table-light">
+            <tr>
+                <td>
+                    <small class="font-weight-bold">Numara:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Kampanya adı:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">Başvuru tarihi:</small>
+                </td>
+                <td>
+                    <small class="font-weight-bold">İşlem:</small>
+                </td>
+            </tr>
+            @foreach (var item in Model)
+            {
+                using (Html.BeginForm("Application", "Manager", new { id = item.CampaignApplicationId }, FormMethod.Get))
+                {
+                    <tr>
+                        <td>
+                            <small>@item.CampaignApplicationId</small>
+                        </td>
+                        <td>
+                            <small>@item.Campaign.Name</small>
+                        </td>
+                        <td>
+                            <small>@item.ApplicationDate</small>
+                        </td>
+                        <td>
+                            <button type="submit" name="btn" value="Show" class="btn btn-sm btn-success">Görüntüle</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+</div>
+
